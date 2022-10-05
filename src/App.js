@@ -1,17 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
+import Login from "./Components/Login";
 import{
-  BrowserRouter as Router, Routes,Route } from 'react-router-dom';
+BrowserRouter as Router, Routes,Route } from 'react-router-dom';
 import Home from './Components/Home';
 import ChatPage from './Components/ChatPage';
+import { auth } from './firebase';
 function App() {
+  const [user, setUser]= useState(JSON.parse(localStorage.getItem("user")));
+  const signOut = () => {
+    auth
+    .signOut()
+    .then(()=>{
+      setUser(null);
+      localStorage.removeItem("user");
+    
+    })
+    .catch((err) => alert(err.message));
+  };
   return (
     <Router>
     <div className="App">
-     <Routes>
-     <Route path="/chatpage" element={<ChatPage />}/>
-        <Route path="/" element={<Home/>} />
-     </Routes>
+    {
+      user ?
+      (<Routes>
+     <Route 
+     path="/:emailID"
+      element={
+          <ChatPage currentUser={user} signOut={signOut} />
+      }/>
+      <Route path="/" 
+      element={<Home currentUser={user} signOut={signOut}/>} />
+     </Routes> ) 
+      : (<Login setUser={setUser}/>)
+    }
+    
     </div>  
      </Router>
   );

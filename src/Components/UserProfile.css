@@ -24,3 +24,9 @@
     text-transform: capitalize;
     font-size: 15px;
 }
+.user-lastmessge{
+    font-size: 13px;
+    margin-left: 1px;
+    margin-top: 2px;
+    color: gray ;
+}
